@@ -42,7 +42,6 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
 
     private MenuItem mMenuItem;
     private boolean mIsSearchOpen = false;
-
     private boolean mClearingFocus;
 
     //Views
