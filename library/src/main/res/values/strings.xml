@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">SearchLibrary</string>
-    <string name="search_hint">Search</string>
+    <string name="app_name" translatable="false">SearchLibrary</string>
+    <string name="search_hint">Search&#8230;</string>
 
     <string-array name="state_array_full">
         <item>Armed Forces Americas</item>
@@ -59,4 +59,6 @@
         <item>West Virginia</item>
         <item>Wyoming</item>
     </string-array>
+
+    <string name="hint_prompt">Speak an item name or number</string>
 </resources>
