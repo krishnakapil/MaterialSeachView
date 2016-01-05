@@ -36,9 +36,14 @@ import java.util.List;
 
 /**
  * Created by stadiko on 6/8/15.
+ * Updated by Mauker on 05/01/16. dd/MM/YY.
  */
 public class MaterialSearchView extends FrameLayout implements Filter.FilterListener {
     public static final int REQUEST_VOICE = 9999;
+
+    // Avoid using magic numbers.
+    //
+    private static final int MAX_RESULTS = 1;
 
     private MenuItem mMenuItem;
     private boolean mIsSearchOpen = false;
@@ -66,6 +71,8 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
 
     private Context mContext;
 
+    private boolean shouldAnimate;
+
     public MaterialSearchView(Context context) {
         this(context, null);
     }
@@ -78,6 +85,8 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         super(context, attrs);
 
         mContext = context;
+
+        shouldAnimate = true;
 
         initiateView();
 
@@ -213,9 +222,9 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
 
     private void onVoiceClicked() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak an item name or number");    // user hint
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);    // setting recognition model, optimized for short phrases – search queries
-        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);    // quantity of results we want to receive
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, mContext.getString(R.string.hint_prompt));    // user hint
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);    // setting recognition model, optimized for short phrases – search queries
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, MAX_RESULTS);    // quantity of results we want to receive
         if (mContext instanceof Activity) {
             ((Activity) mContext).startActivityForResult(intent, REQUEST_VOICE);
         }
@@ -324,6 +333,10 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         }
     }
 
+    public void setShouldAnimate(boolean animate) {
+        shouldAnimate = animate;
+    }
+
     //Public Methods
 
     /**
@@ -424,7 +437,12 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
      * Open Search View. This will animate the showing of the view.
      */
     public void showSearch() {
-        showSearch(true);
+        if (shouldAnimate) {
+            showSearch(true);
+        }
+        else {
+            showSearch(false);
+        }
     }
 
     /**
@@ -442,7 +460,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         mSearchSrcTextView.requestFocus();
 
         if (animate) {
-            AnimationUtil.fadeInView(mSearchLayout, AnimationUtil.ANIMATION_DURATION_MEDIUM, new AnimationUtil.AnimationListener() {
+            AnimationUtil.fadeInView(mSearchLayout, AnimationUtil.ANIMATION_DURATION_SHORT, new AnimationUtil.AnimationListener() {
                 @Override
                 public boolean onAnimationStart(View view) {
                     return false;
